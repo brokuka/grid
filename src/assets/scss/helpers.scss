@@ -1,0 +1,58 @@
+@import "./vars";
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol {
+	margin: 0;
+}
+
+ul,
+ol {
+	padding: 0;
+	list-style-type: none;
+}
+
+.d-flex {
+	display: flex !important;
+	flex-wrap: wrap;
+
+	&.inline {
+		display: inline-flex !important;
+	}
+
+	&.jcsa {
+		justify-content: space-around;
+	}
+
+	&.jcsb {
+		justify-content: space-between;
+	}
+
+	&.jcc {
+		justify-content: center;
+	}
+
+	&.fdc {
+		flex-direction: column;
+	}
+
+	&.aic {
+		align-items: center;
+	}
+}
+
+.g-0 {
+	margin: 0 !important;
+}

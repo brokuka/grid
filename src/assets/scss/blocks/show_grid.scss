@@ -1,0 +1,28 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.show_grid {
+	@include rowGap(5);
+	@include columnGap(2)
+}
+
+.block {
+	width: 100px;
+	height: 100px;
+
+	&:nth-child(n) {
+		background-color: tomato;
+	}
+
+	&:nth-child(2n) {
+		background-color: green;
+	}
+
+	&:nth-child(3n) {
+		background-color: yellowgreen;
+	}
+}

@@ -1,0 +1,206 @@
+@import "vars";
+
+@function strip-unit($number) {
+	@if type-of($number)=='number' and not unitless($number) {
+		@return math.div($number, $number * 0 + 1);
+	}
+
+	@return $number;
+}
+
+@function rem($pxValue) {
+	@return strip-unit(math.div($pxValue, $baseFontSize)) * 1rem;
+}
+
+@function remToPx($value, $type: 1) {
+	@if $type ==1 {
+		@return (strip-unit($value) * $baseFontSize)+px
+	}
+
+	@else {
+		@return strip-unit($value) * $baseFontSize;
+	}
+}
+
+@mixin adaptiveValue($property, $startSize, $minSize, $rem: 1, $type: 1) {
+
+	@if $rem ==1 {
+		$addSize: strip-unit(remToPx($startSize - $minSize, 2));
+
+		@if $type==1 {
+			/* Если меньше контейнера */
+			#{$property}: remToPx($startSize);
+
+			@media (max-width: #{$maxWidthContainer + px}) {
+				#{$property}: calc(#{remToPx($minSize)} + #{$addSize} *((100vw - 320px) / #{$maxWidthContainer - 320}));
+			}
+		}
+
+		@else if $type==2 {
+			/* Если больше контейнера */
+			#{$property}: $startSize + px;
+
+			@media (min-width: #{$maxWidthContainer + px}) {
+				#{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$container - 320}));
+			}
+		}
+
+		@else {
+			/* Всегда */
+			#{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$container - 320}));
+		}
+	}
+
+	@else {
+		$addSize: $startSize - $minSize;
+
+		@if $type==1 {
+			/* Если меньше контейнера */
+			#{$property}: $startSize + px;
+
+			@media (max-width: #{$maxWidthContainer + px}) {
+				#{$property}: calc(#{$minSize + px} + #{$addSize} *((100vw - 320px) / #{$maxWidthContainer - 320}));
+			}
+		}
+
+		@else if $type==2 {
+			/* Если больше контейнера */
+			#{$property}: $startSize + px;
+
+			@media (min-width: #{$maxWidthContainer + px}) {
+				#{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$container - 320}));
+			}
+		}
+
+		@else {
+			/* Всегда */
+			#{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$container - 320}));
+		}
+	}
+}
+
+@mixin rowGap($defaultGap, $minGap: null) {
+	@if $minGap ==null {
+		row-gap: $defaultGap + rem;
+	}
+
+	@else {
+		@include adaptiveValue(row-gap, $defaultGap, $minGap);
+	}
+
+	@supports not (row-gap: $defaultGap + rem) {
+		@if $minGap ==null {
+			margin-top: -$defaultGap + rem;
+		}
+
+		@else {
+			@include adaptiveValue(margin-top, -$defaultGap, -$minGap);
+		}
+
+		>* {
+			@if $minGap ==null {
+				margin-top: $defaultGap + rem;
+			}
+
+			@else {
+				@include adaptiveValue(margin-top, -$defaultGap, -$minGap);
+			}
+		}
+	}
+}
+
+@mixin columnGap($defaultGap, $minGap: null) {
+	@if $minGap ==null {
+		column-gap: $defaultGap + rem;
+	}
+
+	@else {
+		@include adaptiveValue(column-gap, $defaultGap, $minGap);
+	}
+
+	@supports not (column-gap: $defaultGap + rem) {
+		@if $minGap ==null {
+			margin-left: $defaultGap + rem;
+		}
+
+		@else {
+			@include adaptiveValue(margin-left, $defaultGap, -$minGap);
+		}
+
+
+		&:not([dir='rtl']) {
+			>* {
+				@if $minGap ==null {
+					margin-left: -$defaultGap + rem;
+				}
+
+				@else {
+					@include adaptiveValue(margin-left, -$defaultGap, $minGap);
+				}
+			}
+		}
+
+		&[dir='rtl'] {
+			@if $minGap ==null {
+				margin-left: -$defaultGap + rem;
+			}
+
+			@else {
+				@include adaptiveValue(margin-right, -$defaultGap, $minGap);
+			}
+		}
+	}
+}
+
+@mixin calcGridPercent($value, $gridCount) {
+	flex: 0 0 auto;
+	width: calc(($value * 100% / $gridCount));
+}
+
+@mixin createCustomLayout($name: col, $val: $name, $size: null, $gridCount: 12) {
+	@for $i from 1 through $gridCount {
+		@if ($name==col) {
+			.col-#{$i} {
+				@include calcGridPercent($i, $gridCount);
+			}
+		}
+
+		@else {
+			@media (max-width: #{$val}px) {
+				.col-#{$name}-#{$i} {
+					@include calcGridPercent($i, $gridCount);
+				}
+			}
+		}
+	}
+}
+
+@mixin mobile {
+	@media (max-width: #{$mobile}px) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (max-width: #{$tablet}px) {
+		@content;
+	}
+}
+
+@mixin smDesktop {
+	@media (max-width: #{$desktopSm}px) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (max-width: #{$desktop}px) {
+		@content;
+	}
+}
+
+@mixin bgDesktop {
+	@media (max-width: #{$desktopLg}px) {
+		@content;
+	}
+}
