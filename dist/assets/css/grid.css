@@ -1,12 +1,10 @@
 /* Colors */
 /* Font */
 /* Container */
-/* Background */
 /* Responsive */
 /* Colors */
 /* Font */
 /* Container */
-/* Background */
 /* Responsive */
 .row {
   display: -ms-flexbox !important;
@@ -43,11 +41,6 @@
       flex-shrink: 0;
   width: 100%;
   max-width: 100%;
-}
-@media (max-width: 576px) {
-  .row > [class*=col] {
-    padding: 0;
-  }
 }
 .row .col {
   -ms-flex: 1 0 0%;
