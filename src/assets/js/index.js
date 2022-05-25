@@ -56,20 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		const blocks = document.querySelectorAll('.block');
+
 		blocks.forEach(block => {
-			block.cssText = `
-				nth-child(n) {
-					background-color: tomato;
-				}
+			let randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
 
-				nth-child(2n) {
-					background-color: green;
-				}
-
-				.block:nth-child(3n) {
-					background-color: yellowgreen;
-				}
-			`;
+			block.style.backgroundColor = randomColor;
 		})
 	}
 
