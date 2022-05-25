@@ -23,14 +23,17 @@ const path = {
 	build: {
 		html: distPath,
 		css: distPath + "assets/css/",
+		js: distPath + "assets/js/"
 	},
 	src: {
 		html: srcPath + "*.html",
 		css: srcPath + "assets/scss/*.scss",
+		js: srcPath + "assets/js/*.js"
 	},
 	watch: {
 		html: srcPath + "**/*.html",
 		css: srcPath + "assets/scss/**/*.scss",
+		js: srcPath + "assets/js/**/*.js"
 	},
 	clean: "./" + distPath
 }
@@ -115,6 +118,64 @@ function cssWatch(cb) {
 	cb();
 }
 
+function js(cb) {
+	return src(path.src.js, { base: srcPath + 'assets/js/' })
+		.pipe(plumber({
+			errorHandler: function (err) {
+				notify.onError({
+					title: "JS Error",
+					message: "Error: <%= error.message %>"
+				})(err);
+				this.emit('end');
+			}
+		}))
+		.pipe(webpackStream({
+			mode: "production",
+			output: {
+				filename: 'index.js',
+			},
+			module: {
+				rules: [
+					{
+						test: /\.js$/,
+						exclude: /node_modules/,
+						loader: 'babel-loader',
+						options: {
+							presets: ['@babel/preset-env']
+						},
+					},
+				]
+			},
+		}))
+		.pipe(dest(path.build.js))
+		.pipe(browserSync.reload({ stream: true }));
+
+	cb();
+}
+
+function jsWatch(cb) {
+	return src(path.src.js, { base: srcPath + 'assets/js/' })
+		.pipe(plumber({
+			errorHandler: function (err) {
+				notify.onError({
+					title: "JS Error",
+					message: "Error: <%= error.message %>"
+				})(err);
+				this.emit('end');
+			}
+		}))
+		.pipe(webpackStream({
+			mode: "development",
+			output: {
+				filename: 'index.js',
+			}
+		}))
+		.pipe(dest(path.build.js))
+		.pipe(browserSync.reload({ stream: true }));
+
+	cb();
+}
+
 function clean(cb) {
 	return del(path.clean);
 
@@ -124,9 +185,10 @@ function clean(cb) {
 function watchFiles() {
 	gulp.watch([path.watch.html], html);
 	gulp.watch([path.watch.css], cssWatch);
+	gulp.watch([path.watch.js], jsWatch);
 }
 
-const build = gulp.series(clean, gulp.parallel(html, css));
+const build = gulp.series(clean, gulp.parallel(html, css, js));
 const watch = gulp.parallel(build, watchFiles, serve);
 
 
@@ -134,6 +196,7 @@ const watch = gulp.parallel(build, watchFiles, serve);
 /* Exports Tasks */
 exports.html = html;
 exports.css = css;
+exports.js = js;
 exports.build = build;
 exports.watch = watch;
 exports.default = watch;
