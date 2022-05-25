@@ -12,19 +12,50 @@
 <body>
 	<div class="wrapper">
 		<div class="container">
-			<div class="row show_grid">
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-				<div class="block"></div>
-			</div>
+			<form class="row form fdc aic" action="#" class="form" method="get">
+				<label for="col_number">
+					<span>Количество колонок</span><br>
+					<input type="number" name="col_number" id="col_number" value="9" min="1">
+				</label>
+
+				<select name="" id="select_col">
+					<option value="col">col</option>
+					<option value="col-2">col-2</option>
+					<option value="col-3" selected>col-3</option>
+					<option value="col-4">col-4</option>
+					<option value="col-5">col-5</option>
+					<option value="col-6">col-6</option>
+					<option value="col-7">col-7</option>
+					<option value="col-8">col-8</option>
+					<option value="col-9">col-9</option>
+					<option value="col-10">col-10</option>
+					<option value="col-11">col-11</option>
+					<option value="col-12">col-12</option>
+				</select>
+
+				<div class="label-group">
+					<label>
+						<input type="checkbox" name="center">
+						<span>Center</span>
+					</label>
+
+					<label>
+						<input type="checkbox" name="rowgap" checked>
+						<span>Row gap</span>
+					</label>
+
+					<label>
+						<input type="checkbox" name="columngap" checked>
+						<span>Column Gap</span>
+					</label>
+				</div>
+			</form>
+
+			<div class="row show_grid"></div>
 		</div>
 	</div>
+
+	<script src="assets/js/index.js"></script>
 </body>
 
 </html>

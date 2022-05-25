@@ -27,26 +27,34 @@ ol {
 }
 
 .d-flex {
+  display: -ms-flexbox !important;
   display: flex !important;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 .d-flex.inline {
+  display: -ms-inline-flexbox !important;
   display: inline-flex !important;
 }
 .d-flex.jcsa {
-  justify-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 .d-flex.jcsb {
-  justify-content: space-between;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
 }
 .d-flex.jcc {
-  justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
 }
 .d-flex.fdc {
-  flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
 }
 .d-flex.aic {
-  align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
 }
 
 .g-0 {
